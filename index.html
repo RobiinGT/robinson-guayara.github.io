@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robinson Guayara — Portafolio Fotográfico</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #080808;
+    color: #e8e8e8;
+    font-family: 'Georgia', serif;
+  }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .hero-name {
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: #e8e8e8;
+    margin-bottom: 1rem;
+  }
+
+  .hero-sub {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-line {
+    width: 40px;
+    height: 1px;
+    background: #c8a96e;
+    margin: 0 auto 2.5rem;
+  }
+
+  .hero-scroll {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #444;
+    position: absolute;
+    bottom: 2rem;
+    animation: pulse 2.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* GALERÍA */
+  .gallery-section {
+    padding: 5rem 1.5rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .gallery-grid {
+    columns: 3;
+    column-gap: 10px;
+  }
+
+  @media (max-width: 900px) { .gallery-grid { columns: 2; } }
+  @media (max-width: 500px) { .gallery-grid { columns: 1; } }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #111;
+    position: relative;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    display: block;
+    transition: transform 0.5s ease, filter 0.4s;
+    filter: grayscale(10%);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.03);
+    filter: grayscale(0%);
+  }
+
+  /* AUTOBIOGRAFÍA */
+  .bio-section {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 6rem 2rem;
+  }
+
+  .bio-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 700px) {
+    .bio-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  .bio-photo-wrap img {
+    width: 100%;
+    display: block;
+    filter: grayscale(15%);
+    aspect-ratio: 3/4;
+    object-fit: cover;
+  }
+
+  .bio-photo-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: #111;
+    border: 1px dashed rgba(255,255,255,0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    color: #444;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .bio-photo-placeholder span { font-size: 2rem; }
+
+  .bio-label {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #c8a96e;
+    margin-bottom: 1.2rem;
+  }
+
+  .bio-name {
+    font-size: 1.7rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.4rem;
+    color: #e8e8e8;
+  }
+
+  .bio-tagline {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 2rem;
+  }
+
+  .bio-line {
+    width: 30px;
+    height: 1px;
+    background: #c8a96e;
+    margin-bottom: 2rem;
+  }
+
+  .bio-text p {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: #999;
+    margin-bottom: 1.3rem;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #333;
+  }
+
+  /* LIGHTBOX */
+  .lb {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0,0,0,0.96);
+    align-items: center;
+    justify-content: center;
+  }
+  .lb.open { display: flex; }
+
+  .lb-img {
+    max-width: 88vw;
+    max-height: 88vh;
+    object-fit: contain;
+    display: block;
+  }
+
+  .lb-btn {
+    position: absolute;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #e8e8e8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s;
+    font-size: 1.1rem;
+  }
+  .lb-btn:hover { border-color: #c8a96e; }
+
+  .lb-close { top: 1.2rem; right: 1.2rem; width: 38px; height: 38px; }
+  .lb-prev  { left: 1.2rem; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; }
+  .lb-next  { right: 1.2rem; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; }
+
+  .lb-count {
+    position: absolute;
+    bottom: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-sub">Portafolio fotográfico</p>
+  <h1 class="hero-name">Robinson Guayara</h1>
+  <div class="hero-line"></div>
+  <p class="hero-scroll">↓ ver trabajo</p>
+</section>
+
+<!-- GALERÍA -->
+<div class="gallery-section">
+  <div class="gallery-grid" id="gallery">
+
+    <div class="gallery-item"><img src="foto01.jpg" alt="Foto 01" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto02.jpg" alt="Foto 02" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto04.jpg" alt="Foto 04" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto05.jpg" alt="Foto 05" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto06.jpg" alt="Foto 06" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto07.jpg" alt="Foto 07" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto08.jpg" alt="Foto 08" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto09.jpg" alt="Foto 09" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto10.jpg" alt="Foto 10" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto11.jpg" alt="Foto 11" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto12.jpg" alt="Foto 12" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto13.jpg" alt="Foto 13" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto14.jpg" alt="Foto 14" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto15.jpg" alt="Foto 15" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto16.jpg" alt="Foto 16" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto17.jpg" alt="Foto 17" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto18.jpg" alt="Foto 18" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto19.jpg" alt="Foto 19" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto20.jpg" alt="Foto 20" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto21.jpg" alt="Foto 21" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto22.jpg" alt="Foto 22" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto23.jpg" alt="Foto 23" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto24.jpg" alt="Foto 24" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto25.jpg" alt="Foto 25" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto26.jpg" alt="Foto 26" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto27.jpg" alt="Foto 27" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto28.jpg" alt="Foto 28" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto29.jpg" alt="Foto 29" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto30.jpg" alt="Foto 30" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto31.jpg" alt="Foto 31" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto32.jpg" alt="Foto 32" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto33.jpg" alt="Foto 33" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto34.jpg" alt="Foto 34" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto35.jpg" alt="Foto 35" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto36.jpg" alt="Foto 36" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto37.jpg" alt="Foto 37" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto38.jpg" alt="Foto 38" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto39.jpg" alt="Foto 39" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto40.jpg" alt="Foto 40" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto41.jpg" alt="Foto 41" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto42.jpg" alt="Foto 42" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto43.jpg" alt="Foto 43" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto44.jpg" alt="Foto 44" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto45.jpg" alt="Foto 45" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto46.jpg" alt="Foto 46" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto47.jpg" alt="Foto 47" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto48.jpg" alt="Foto 48" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto49.jpg" alt="Foto 49" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto50.jpg" alt="Foto 50" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto51.jpg" alt="Foto 51" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto52.jpg" alt="Foto 52" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto53.jpg" alt="Foto 53" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto54.jpg" alt="Foto 54" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto55.jpg" alt="Foto 55" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto56.jpg" alt="Foto 56" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto57.jpg" alt="Foto 57" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto58.jpg" alt="Foto 58" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto59.jpg" alt="Foto 59" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto60.jpg" alt="Foto 60" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto61.jpg" alt="Foto 61" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto62.jpg" alt="Foto 62" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto63.jpg" alt="Foto 63" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto64.jpg" alt="Foto 64" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto65.jpg" alt="Foto 65" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto66.jpg" alt="Foto 66" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto67.jpg" alt="Foto 67" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto68.jpg" alt="Foto 68" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto69.jpg" alt="Foto 69" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto70.jpg" alt="Foto 70" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto71.jpg" alt="Foto 71" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto72.jpg" alt="Foto 72" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto73.jpg" alt="Foto 73" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto74.jpg" alt="Foto 74" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto75.jpg" alt="Foto 75" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto76.jpg" alt="Foto 76" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto77.jpg" alt="Foto 77" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto78.jpg" alt="Foto 78" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto79.jpg" alt="Foto 79" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto80.jpg" alt="Foto 80" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto81.jpg" alt="Foto 81" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto82.jpg" alt="Foto 82" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto83.jpg" alt="Foto 83" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto84.jpg" alt="Foto 84" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto85.jpg" alt="Foto 85" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto86.jpg" alt="Foto 86" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto87.jpg" alt="Foto 87" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto88.jpg" alt="Foto 88" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto89.jpg" alt="Foto 89" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto90.jpg" alt="Foto 90" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto91.jpg" alt="Foto 91" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto92.jpg" alt="Foto 92" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto93.jpg" alt="Foto 93" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto94.jpg" alt="Foto 94" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto95.jpg" alt="Foto 95" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto96.jpg" alt="Foto 96" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto97.jpg" alt="Foto 97" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto98.jpg" alt="Foto 98" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto99.jpg" alt="Foto 99" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto100.jpg" alt="Foto 100" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto101.jpg" alt="Foto 101" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto102.jpg" alt="Foto 102" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto103.jpg" alt="Foto 103" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto104.jpg" alt="Foto 104" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto105.jpg" alt="Foto 105" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto106.jpg" alt="Foto 106" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto107.jpg" alt="Foto 107" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto108.jpg" alt="Foto 108" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto109.jpg" alt="Foto 109" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto110.jpg" alt="Foto 110" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto111.jpg" alt="Foto 111" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto112.jpg" alt="Foto 112" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto113.jpg" alt="Foto 113" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto114.jpg" alt="Foto 114" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto115.jpg" alt="Foto 115" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto116.jpg" alt="Foto 116" loading="lazy"></div>
+    <div class="gallery-item"><img src="foto117.jpg" alt="Foto 117" loading="lazy"></div>
+
+  
+
+  </div>
+</div>
+
+<!-- AUTOBIOGRAFÍA -->
+<section class="bio-section">
+  <div class="bio-inner">
+
+    <div class="bio-photo-wrap">
+      <!--
+        Reemplaza el bloque de abajo con:
+        <img src="Robinson Guayara.jpg" alt="Robinson Guayara">
+        cuando tengas tu foto lista.
+      -->
+      <div class="bio-photo-placeholder">
+        <span>☻</span>
+        <p>Reemplaza con tu foto</p>
+        <p style="font-size:0.65rem; color:#333;">src="Robinson Guayara.jpg"</p>
+      </div>
+    </div>
+
+    <div class="bio-text">
+      <p class="bio-label">Autobiografía</p>
+      <h2 class="bio-name">Robinson Guayara Tabares</h2>
+      <p class="bio-tagline">Bogotá, 2002 · Ingeniería Eléctrica · U. Distrital</p>
+      <div class="bio-line"></div>
+
+      <p>
+        Me llamo Robinson Guayara Tabares, nací en Bogotá el 24 de marzo de 2002,
+        tengo 24 años y soy estudiante de Ingeniería Eléctrica de la Universidad
+        Distrital Francisco José de Caldas.
+      </p>
+      <p>
+        Estoy aquí gracias a las decisiones que he tomado y a las distintas
+        facilidades y dificultades que la vida me ha puesto en el camino. Sería
+        mentira decir que desde pequeño soñaba con estudiar esta carrera, pero
+        aun así agradezco el lugar en el que estoy y las metas que hoy tengo
+        para mi futuro.
+      </p>
+      <p>
+        La fotografía apareció como una experiencia inesperada dentro de este
+        proceso. Empezar a observar y fotografiar me ayudó a desarrollar otra
+        mirada hacia los pequeños detalles y a descubrir cómo algo tan simple
+        como observar puede transmitir distintas sensaciones. Además, me permitió
+        reencontrarme poco a poco con una creatividad que sentía más distante con
+        el paso del tiempo y descubrir un interés personal que no esperaba encontrar.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  © 2025 Robinson Guayara · Portafolio fotográfico
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb">
+  <button class="lb-btn lb-close" id="lb-close">✕</button>
+  <button class="lb-btn lb-prev" id="lb-prev">‹</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+  <button class="lb-btn lb-next" id="lb-next">›</button>
+  <div class="lb-count" id="lb-count"></div>
+</div>
+
+<script>
+  const items = Array.from(document.querySelectorAll('.gallery-item'));
+  let cur = 0;
+
+  items.forEach((item, i) => {
+    item.addEventListener('click', () => {
+      cur = i;
+      show();
+      document.getElementById('lb').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function show() {
+    const src = items[cur].querySelector('img').src;
+    const alt = items[cur].querySelector('img').alt;
+    document.getElementById('lb-img').src = src;
+    document.getElementById('lb-img').alt = alt;
+    document.getElementById('lb-count').textContent = (cur + 1) + ' / ' + items.length;
+  }
+
+  function close() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('lb-close').addEventListener('click', close);
+  document.getElementById('lb').addEventListener('click', e => { if (e.target === e.currentTarget) close(); });
+
+  document.getElementById('lb-prev').addEventListener('click', () => {
+    cur = (cur - 1 + items.length) % items.length;
+    show();
+  });
+  document.getElementById('lb-next').addEventListener('click', () => {
+    cur = (cur + 1) % items.length;
+    show();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lb').classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click();
+    if (e.key === 'ArrowRight') document.getElementById('lb-next').click();
+  });
+</script>
+</body>
+</html>
